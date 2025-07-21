@@ -29,6 +29,7 @@
     font-size: 14px;
     font-weight: 600;
     color: var(--primary-text-color);
+    flex-shrink: 0; /* 防止状态栏在 flex 布局中被压缩 */
 }
 
 .right-icons span {
