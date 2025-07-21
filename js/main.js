@@ -4,7 +4,7 @@
 
 import { updateTime } from './utils/time.js';
 import { switchView, views, initViews } from './ui/view-manager.js';
-import { initChat } from './modules/chat.js';
+import { initChat, scrollToBottom } from './modules/chat.js';
 import { initSettingsPage } from './modules/settings.js';
 
 // --- 元素缓存 ---
@@ -20,6 +20,10 @@ function handleMainContentClick(event) {
         const appName = appIcon.dataset.app;
         if (views[appName]) {
             switchView(appName);
+            // 新增：如果切换到的是聊天视图，则滚动到底部
+            if (appName === 'chat') {
+                scrollToBottom();
+            }
         } else {
             alert(`你点击了 "${appName}" 应用，但我们还没做这个功能哦！`);
         }

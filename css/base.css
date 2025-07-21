@@ -11,6 +11,7 @@
     --phone-case-color: #1c1c1c;
     --phone-screen-color: #ffffff;
     --primary-text-color: #333;
+    --secondary-text-color: #979797; /* 次要文字颜色，用于时间戳等 */
     --app-icon-bg: #F5F5DC;
     --chat-bg-color: #f7f7f7;
     --chat-border-color: #f0f0f0;
@@ -39,4 +40,23 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* --- 全局美化滚动条 --- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
 }

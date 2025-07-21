@@ -1,6 +1,6 @@
 /* 手机外壳的样式 - 响应式版本 */
 .phone-casing {
-    height: 95%; /* 高度为父元素(body)的95% */
+    height: 100%; /* 高度为父元素(body)的100% */
     aspect-ratio: 375 / 812;
     background-color: var(--phone-case-color);
     border-radius: var(--case-border-radius);

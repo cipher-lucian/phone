@@ -56,7 +56,6 @@
 .message {
     padding: 10px 15px;
     border-radius: 18px;
-    max-width: 75%;
     word-wrap: break-word; /* 长单词或链接自动换行 */
 }
 
@@ -125,7 +124,12 @@
     padding: 8px 12px;
     font-size: 16px;
     min-width: 0;
-    width: 100%; 
+    width: 100%;
+    resize: none; /* 禁止用户手动调整大小 */
+    overflow-y: hidden; /* 初始隐藏滚动条 */
+    box-sizing: border-box; /* 确保 padding 和 border 在高度计算之内 */
+    max-height: 120px; /* 设置最大高度，约等于6行 */
+    line-height: 1.4; /* 改善多行文本的行间距 */
 }
 
 .chat-input-area .send-button,
@@ -206,4 +210,30 @@
     justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
+}
+
+/* --- 时间戳样式 --- */
+.message-wrapper {
+    display: flex;
+    align-items: flex-end; /* 垂直底部对齐 */
+    gap: 8px; /* 消息和时间戳之间的间距 */
+    max-width: 85%; /* 限制最大宽度，给时间戳留出空间 */
+}
+
+/* 用户发出的消息，整体靠右 */
+.message-wrapper.sent {
+    align-self: flex-end;
+    flex-direction: row-reverse; /* 将消息和时间戳左右反转 */
+}
+
+/* AI 回复的消息，整体靠左 */
+.message-wrapper.received {
+    align-self: flex-start;
+}
+
+.message-timestamp {
+    font-size: 12px;
+    color: var(--secondary-text-color);
+    white-space: nowrap; /* 防止时间换行 */
+    margin-bottom: 8px; /* 与消息气泡的底部对齐感更好 */
 }
