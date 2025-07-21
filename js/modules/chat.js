@@ -1,4 +1,5 @@
 import { saveToStorage, loadFromStorage } from '../utils/storage.js';
+import { formatTimestamp, getFormattedDateTime, getTimeDifferenceDescription } from '../utils/time.js';
 
 // --- DOM 元素 ---
 let chatMessages, chatInput, sendButton, chatTitle, apiCallButton;
@@ -67,11 +68,34 @@ function closePersonaModal() {
 }
 
 // --- 聊天功能 ---
-function createMessageElement(text, type) {
+function createMessageElement(messageData) {
+    const { text, type, timestamp } = messageData;
+
+    // 1. 创建最外层的包裹元素
+    const wrapperElement = document.createElement('div');
+    // 添加 'sent' 或 'received' 类用于整体布局
+    wrapperElement.classList.add('message-wrapper', type);
+
+    // 2. 创建消息气泡
     const messageElement = document.createElement('div');
-    messageElement.classList.add('message', type);
+    messageElement.classList.add('message', type); // 修正：将 type 类名加回来
     messageElement.textContent = text;
-    return messageElement;
+
+    // 3. 创建时间戳元素 (如果存在时间戳)
+    let timestampElement;
+    if (timestamp) {
+        timestampElement = document.createElement('span');
+        timestampElement.classList.add('message-timestamp');
+        timestampElement.textContent = formatTimestamp(timestamp);
+    }
+
+    // 4. 组装
+    wrapperElement.appendChild(messageElement);
+    if (timestampElement) {
+        wrapperElement.appendChild(timestampElement);
+    }
+
+    return wrapperElement;
 }
 
 // --- 加载提示 ---
@@ -101,11 +125,15 @@ async function renderAiMessagesSequentially(commands) {
     try {
         for (const command of commands) {
             if (command.type === 'text') {
-                const messageData = { text: command.content, type: 'received' };
+                const messageData = { 
+                    text: command.content, 
+                    type: 'received',
+                    timestamp: Date.now() // 添加时间戳
+                };
                 chatHistory.push(messageData);
                 saveToStorage('chatHistory', chatHistory);
 
-                const messageElement = createMessageElement(messageData.text, messageData.type);
+                const messageElement = createMessageElement(messageData); // 传递整个对象
                 chatMessages.appendChild(messageElement);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
 
@@ -117,7 +145,7 @@ async function renderAiMessagesSequentially(commands) {
         }
     } catch (error) {
         console.error('渲染 AI 消息时出错:', error);
-        const errorElement = createMessageElement(`渲染消息时出错: ${error.message}`, 'received');
+        const errorElement = createMessageElement({ text: `渲染消息时出错: ${error.message}`, type: 'received' });
         chatMessages.appendChild(errorElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -129,18 +157,27 @@ async function getAiReply() {
     const apiSettings = loadFromStorage('apiSettings');
     if (!apiSettings || !apiSettings.apiKey || !apiSettings.apiUrl) {
         const replyText = '错误：请先在设置中配置 API 密钥和地址。';
-        const errorElement = createMessageElement(replyText, 'received');
+        const errorElement = createMessageElement({ text: replyText, type: 'received' });
         chatMessages.appendChild(errorElement);
         return;
     }
 
     // 2. 准备系统消息 (System Prompt) - 【第一阶段修改】
+    // 新增：为 AI 提供时间感知能力
+    const lastMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
+    const timeDescription = getTimeDifferenceDescription(lastMessage?.timestamp);
+
     const finalSystemPrompt = `
-核心规则
+    你现在扮演一个名为"${currentAiPersona.name}"的角色。
+    核心规则
 【【【格式铁律】】】: 你的回复【必须】是一个 JSON 数组格式的字符串。数组中的每一个元素都必须是一个带有 type 字段的 JSON 对象。
-【【【对话节奏】】】: 模拟真人的聊天习惯，你可以一次性生成一个包含多条短消息的数组。
+【【【对话节奏】】】: 模拟真人的聊天习惯，你可以一次性生成多条短消息。每次要回复至少3-8条消息！！！
 【【【唯一指令】】】: 目前你只会一种操作：发送文本。格式为：
 {"type": "text", "content": "你想说的内容"}
+
+情景感知
+当前时间: ${getFormattedDateTime()}
+对话状态: ${timeDescription}
 
 你的角色设定
 ${currentAiPersona.prompt}
@@ -200,7 +237,7 @@ ${currentAiPersona.prompt}
             // AI 不听话，返回的不是标准 JSON
             console.error('JSON 解析失败:', parseError);
             const errorMsg = `AI 返回了无效的格式。原始内容：\n${replyText}`;
-            const errorElement = createMessageElement(errorMsg, 'received');
+            const errorElement = createMessageElement({ text: errorMsg, type: 'received' });
             chatMessages.appendChild(errorElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             return; // 提前退出
@@ -209,7 +246,7 @@ ${currentAiPersona.prompt}
         if (!Array.isArray(commands)) {
             // AI 返回了 JSON 但不是数组
             const errorMsg = `AI 返回了非数组格式。`;
-            const errorElement = createMessageElement(errorMsg, 'received');
+            const errorElement = createMessageElement({ text: errorMsg, type: 'received' });
             chatMessages.appendChild(errorElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             return; // 提前退出
@@ -223,7 +260,7 @@ ${currentAiPersona.prompt}
 
     } catch (error) {
         console.error('获取 AI 回复时出错:', error);
-        const errorElement = createMessageElement(`获取回复失败: ${error.message}`, 'received');
+        const errorElement = createMessageElement({ text: `获取回复失败: ${error.message}`, type: 'received' });
         chatMessages.appendChild(errorElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     } finally {
@@ -232,29 +269,60 @@ ${currentAiPersona.prompt}
     }
 }
 
+// --- 新增：动态调整输入框高度 ---
+function adjustTextareaHeight(textarea) {
+    // 先重置高度，以便获取正确的 scrollHeight
+    textarea.style.height = 'auto';
+    
+    // 设置新的高度
+    textarea.style.height = `${textarea.scrollHeight}px`;
+
+    // 根据是否超过最大高度来决定是否显示滚动条
+    if (textarea.scrollHeight > parseInt(getComputedStyle(textarea).maxHeight)) {
+        textarea.style.overflowY = 'auto';
+    } else {
+        textarea.style.overflowY = 'hidden';
+    }
+}
+
+
 function sendMessage() {
     const text = chatInput.value.trim();
     if (text === '') return;
 
     // 1. 更新数据
-    const messageData = { text: text, type: 'sent' };
+    const messageData = { 
+        text: text, 
+        type: 'sent',
+        timestamp: Date.now() // 添加时间戳
+    };
     chatHistory.push(messageData);
     saveToStorage('chatHistory', chatHistory);
 
     // 2. 更新视图
-    const messageElement = createMessageElement(messageData.text, messageData.type);
+    const messageElement = createMessageElement(messageData); // 传递整个对象
     chatMessages.appendChild(messageElement);
 
     // 3. 清理和滚动
     chatInput.value = '';
     chatInput.focus();
+    adjustTextareaHeight(chatInput); // 重置输入框高度
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
 }
 
 function handleChatInput(event) {
-    if (event.key === 'Enter') {
+    // Shift + Enter 换行, 单独 Enter 发送
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // 阻止默认的换行行为
         sendMessage();
+    }
+}
+
+// --- 新增：滚动到底部函数 ---
+function scrollToBottom() {
+    if (chatMessages) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 }
 
@@ -281,7 +349,11 @@ function initChat() {
     // 绑定事件监听器
     if (sendButton) sendButton.addEventListener('click', sendMessage);
     if (apiCallButton) apiCallButton.addEventListener('click', getAiReply);
-    if (chatInput) chatInput.addEventListener('keydown', handleChatInput);
+    if (chatInput) {
+        chatInput.addEventListener('keydown', handleChatInput);
+        // 监听输入事件，实时调整高度
+        chatInput.addEventListener('input', () => adjustTextareaHeight(chatInput));
+    }
     if (moreOptionsButton) moreOptionsButton.addEventListener('click', openPersonaModal);
     if (savePersonaButton) savePersonaButton.addEventListener('click', savePersonas);
     if (cancelPersonaButton) cancelPersonaButton.addEventListener('click', closePersonaModal);
@@ -296,7 +368,8 @@ function initChat() {
     // 加载历史记录
     chatHistory = loadFromStorage('chatHistory') || [];
     chatHistory.forEach(messageData => {
-        const messageElement = createMessageElement(messageData.text, messageData.type);
+        // 现在传递整个 messageData 对象，以支持旧消息（无时间戳）和新消息
+        const messageElement = createMessageElement(messageData);
         chatMessages.appendChild(messageElement);
     });
     
@@ -306,4 +379,4 @@ function initChat() {
 }
 
 // --- 导出初始化函数 ---
-export { initChat };
+export { initChat, scrollToBottom };
