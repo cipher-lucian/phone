@@ -1,0 +1,239 @@
+/* 全局样式，让所有元素盒模型更直观 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* 使用CSS变量定义颜色和关键尺寸 */
+:root {
+    --bg-color: #f0f0f0;
+    --phone-case-color: #1c1c1c;
+    --phone-screen-color: #ffffff;
+    --primary-text-color: #333;
+    --app-icon-bg: #F5F5DC;
+    --chat-bg-color: #f7f7f7;
+    --chat-border-color: #f0f0f0;
+    --button-primary-bg: #007bff;
+    --button-primary-text: white;
+    --input-border-color: #ccc;
+
+    --case-border-radius: 40px;
+    --screen-border-radius: 28px;
+    --input-border-radius: 18px;
+}
+
+/* 页面背景，让手机更突出 */
+body {
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--app-height, 100vh); /* 使用JS变量，并提供一个回退值 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden; /* 禁止页面滚动 */
+}
+
+#app {
+    height: 100%; /* 让 #app 填满 body，为子元素提供高度基准 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 手机外壳的样式 - 响应式版本 */
+.phone-casing {
+    height: 95%; /* 高度为父元素(body)的95% */
+    aspect-ratio: 375 / 812;
+    background-color: var(--phone-case-color);
+    border-radius: var(--case-border-radius);
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* 手机屏幕的样式 */
+.phone-screen {
+    background-color: var(--phone-screen-color);
+    height: 100%;
+    width: 100%;
+    border-radius: var(--screen-border-radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 状态栏样式 */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-text-color);
+}
+
+.right-icons span {
+    margin-left: 8px;
+}
+
+/* 主内容区样式 */
+.main-content {
+    flex-grow: 1;
+    /* color: #333; */ /* 这行也可以删掉，让子元素自己决定颜色 */
+    min-width: 0;
+    /* 为了让子元素能占满高度，加上flex */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+
+/* --- 任务三：主屏幕样式 (响应式优化版) --- */
+
+.home-screen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    
+    /* 关键改动1: 把固定的gap和padding改成相对单位(百分比) */
+    /* 这样间距会随着手机变小而变小 */
+    gap: 5%; 
+    padding: 5%;
+}
+
+.app-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.app-icon-img {
+    /* 关键改动2: 不再使用固定的60px宽度 */
+    width: 100%; /* 让图标宽度占满它所在的网格单元(1fr的宽度) */
+
+    /* 关键改动3: 使用aspect-ratio来保持图标是正方形 */
+    aspect-ratio: 1 / 1; /* 让它的高度永远等于它的宽度 */
+
+    border-radius: 25%; /* 使用百分比，让圆角也更自适应 */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 28px;
+    color: white;
+}
+
+.app-icon-bg {
+    background-color: var(--app-icon-bg);
+}
+
+.app-icon-label {
+    font-size: 12px;
+    color: var(--primary-text-color);
+    /* 为了防止文字过长换行破坏布局，可以加上这几行 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+}
+
+/* --- 任务四：聊天界面样式 --- */
+
+.chat-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: var(--chat-bg-color);
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--chat-border-color);
+    height: 44px;
+    background-color: var(--chat-bg-color);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.chat-header .chat-title {
+    font-weight: 600;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 10px 15px; /* 上下也加一点边距 */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 消息之间的间距 */
+}
+
+/* --- 任务五：消息气泡样式 --- */
+.message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 75%;
+    word-wrap: break-word; /* 长单词或链接自动换行 */
+}
+
+.message.sent {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    align-self: flex-end; /* 自己发的消息靠右 */
+    border-bottom-right-radius: 4px; /* 右下角变直一点，更像气泡 */
+}
+
+.message.received {
+    background-color: #e5e5ea; /* 接收消息的灰色 */
+    color: var(--primary-text-color);
+    align-self: flex-start; /* 接收的消息靠左 */
+    border-bottom-left-radius: 4px; /* 左下角变直一点 */
+}
+
+
+.chat-input-area {
+    display: flex;
+    padding: 10px 15px;
+    border-top: 1px solid var(--chat-border-color);
+    background-color: var(--chat-bg-color);
+    flex-shrink: 0;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-input-area .chat-input {
+    flex-grow: 1;
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--input-border-radius);
+    padding: 8px 12px;
+    font-size: 16px;
+    min-width: 0;
+    width: 100%; 
+}
+
+.chat-input-area .send-button {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: none;
+    border-radius: var(--input-border-radius);
+    padding: 8px 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* --- 最终修复代码 --- */
+.chat-view {
+    min-width: 0;
+}
+
+.hidden {
+    display: none !important;
+}

@@ -1,0 +1,42 @@
+/* 全局样式，让所有元素盒模型更直观 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* 使用CSS变量定义颜色和关键尺寸 */
+:root {
+    --bg-color: #f0f0f0;
+    --phone-case-color: #1c1c1c;
+    --phone-screen-color: #ffffff;
+    --primary-text-color: #333;
+    --app-icon-bg: #F5F5DC;
+    --chat-bg-color: #f7f7f7;
+    --chat-border-color: #f0f0f0;
+    --button-primary-bg: #007bff;
+    --button-primary-text: white;
+    --input-border-color: #ccc;
+
+    --case-border-radius: 40px;
+    --screen-border-radius: 28px;
+    --input-border-radius: 18px;
+}
+
+/* 页面背景，让手机更突出 */
+body {
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--app-height, 100vh); /* 使用JS变量，并提供一个回退值 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden; /* 禁止页面滚动 */
+}
+
+#app {
+    height: 100%; /* 让 #app 填满 body，为子元素提供高度基准 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

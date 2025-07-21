@@ -1,0 +1,92 @@
+/* --- 任务四：聊天界面样式 --- */
+
+.chat-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: var(--chat-bg-color);
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--chat-border-color);
+    height: 44px;
+    background-color: var(--chat-bg-color);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.chat-header .chat-title {
+    font-weight: 600;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 10px 15px; /* 上下也加一点边距 */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 消息之间的间距 */
+}
+
+/* --- 任务五：消息气泡样式 --- */
+.message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 75%;
+    word-wrap: break-word; /* 长单词或链接自动换行 */
+}
+
+.message.sent {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    align-self: flex-end; /* 自己发的消息靠右 */
+    border-bottom-right-radius: 4px; /* 右下角变直一点，更像气泡 */
+}
+
+.message.received {
+    background-color: #e5e5ea; /* 接收消息的灰色 */
+    color: var(--primary-text-color);
+    align-self: flex-start; /* 接收的消息靠左 */
+    border-bottom-left-radius: 4px; /* 左下角变直一点 */
+}
+
+
+.chat-input-area {
+    display: flex;
+    padding: 10px 15px;
+    border-top: 1px solid var(--chat-border-color);
+    background-color: var(--chat-bg-color);
+    flex-shrink: 0;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-input-area .chat-input {
+    flex-grow: 1;
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--input-border-radius);
+    padding: 8px 12px;
+    font-size: 16px;
+    min-width: 0;
+    width: 100%; 
+}
+
+.chat-input-area .send-button {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: none;
+    border-radius: var(--input-border-radius);
+    padding: 8px 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* --- 最终修复代码 --- */
+.chat-view {
+    min-width: 0;
+}

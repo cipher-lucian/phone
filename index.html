@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的模拟手机</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components/home.css">
+    <link rel="stylesheet" href="css/components/chat.css">
+    <link rel="stylesheet" href="css/components/settings.css">
+    <link rel="stylesheet" href="css/utilities.css">
+</head>
+<body>
+
+    <div id="app">
+        <div class="phone-casing">
+            <div class="phone-screen">
+                <div class="status-bar">
+                    <span class="time">1:10 AM</span>
+                    <div class="right-icons">
+                        <span>📶</span>
+                        <span>Wi-Fi</span>
+                        <span>100% 🔋</span>
+                    </div>
+                </div>
+<div class="main-content">
+    <div class="home-screen">
+        <div class="app-icon" data-app="chat">
+            <div class="app-icon-img app-icon-bg">💬</div>
+            <span class="app-icon-label">聊天</span>
+        </div>
+        <div class="app-icon" data-app="diary">
+            <div class="app-icon-img app-icon-bg">📖</div>
+            <span class="app-icon-label">日记</span>
+        </div>
+        <div class="app-icon" data-app="photos">
+            <div class="app-icon-img app-icon-bg">🖼️</div>
+            <span class="app-icon-label">相册</span>
+        </div>
+        <div class="app-icon" data-app="settings">
+            <div class="app-icon-img app-icon-bg">⚙️</div>
+            <span class="app-icon-label">设置</span>
+        </div>
+    </div>
+    <div class="chat-view hidden">
+        
+        <div class="chat-header">
+            <button class="back-button">＜ 返回</button>
+            <span class="chat-title">AI 助手</span>
+            <span class="more-options">...</span>
+        </div>
+        
+        <div class="chat-messages">
+            </div>
+        
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" placeholder="输入消息...">
+            <button class="send-button">发送</button>
+        </div>
+        
+    </div>
+    <div class="settings-view hidden">
+        <div class="settings-header">
+            <button class="back-button">＜ 返回</button>
+            <span class="settings-title">API 设置</span>
+        </div>
+        <div class="settings-content">
+            <div class="info-box">
+                <p>提示：若要使用高级功能，请选择支持 Vision 的模型...</p>
+            </div>
+            <div class="form-group">
+                <label for="api-url">反代地址 <span>(不需要添加 /v1 噢~)</span></label>
+                <input type="text" id="api-url" placeholder="例如: https://api.openai.com">
+            </div>
+            <div class="form-group">
+                <label for="api-key">密钥 (API Key)</label>
+                <input type="password" id="api-key" placeholder="sk-...">
+            </div>
+            <div class="form-group">
+                <label for="api-model">模型</label>
+                <select id="api-model">
+                    <option>请先拉取模型</option>
+                </select>
+            </div>
+            <button id="fetch-models-btn" class="btn-primary">拉取模型</button>
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </div>
+</div>
+            </div>
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
