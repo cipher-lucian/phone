@@ -84,6 +84,9 @@ body {
     /* color: #333; */ /* 这行也可以删掉，让子元素自己决定颜色 */
     min-width: 0;
     /* 为了让子元素能占满高度，加上flex */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 

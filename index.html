@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的模拟手机</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components/home.css">
+    <link rel="stylesheet" href="css/components/chat.css">
+    <link rel="stylesheet" href="css/components/settings.css">
+    <link rel="stylesheet" href="css/utilities.css">
 </head>
 <body>
 
@@ -38,7 +43,7 @@
             <span class="app-icon-label">设置</span>
         </div>
     </div>
-    <div class="chat-view">
+    <div class="chat-view hidden">
         
         <div class="chat-header">
             <button class="back-button">＜ 返回</button>
@@ -55,12 +60,39 @@
         </div>
         
     </div>
+    <div class="settings-view hidden">
+        <div class="settings-header">
+            <button class="back-button">＜ 返回</button>
+            <span class="settings-title">API 设置</span>
+        </div>
+        <div class="settings-content">
+            <div class="info-box">
+                <p>提示：若要使用高级功能，请选择支持 Vision 的模型...</p>
+            </div>
+            <div class="form-group">
+                <label for="api-url">反代地址 <span>(不需要添加 /v1 噢~)</span></label>
+                <input type="text" id="api-url" placeholder="例如: https://api.openai.com">
+            </div>
+            <div class="form-group">
+                <label for="api-key">密钥 (API Key)</label>
+                <input type="password" id="api-key" placeholder="sk-...">
+            </div>
+            <div class="form-group">
+                <label for="api-model">模型</label>
+                <select id="api-model">
+                    <option>请先拉取模型</option>
+                </select>
+            </div>
+            <button id="fetch-models-btn" class="btn-primary">拉取模型</button>
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </div>
 </div>
             </div>
             <div class="home-indicator"></div>
         </div>
     </div>
 
-<script src="script.js"></script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
