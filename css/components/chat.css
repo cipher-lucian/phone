@@ -9,19 +9,38 @@
 }
 
 .chat-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* 三栏布局 */
     align-items: center;
-    padding: 10px 15px;
+    padding: 0 10px; /* 调整内边距 */
     border-bottom: 1px solid var(--chat-border-color);
     height: 44px;
     background-color: var(--chat-bg-color);
     flex-shrink: 0;
-    overflow: hidden;
+}
+
+.chat-header .back-button,
+.chat-header .more-options {
+    padding: 10px; /* 增大点击区域 */
+    text-align: center;
+    cursor: pointer;
+}
+
+.chat-header .back-button {
+    justify-self: start; /* 左对齐 */
+}
+
+.chat-header .more-options {
+    justify-self: end; /* 右对齐 */
 }
 
 .chat-header .chat-title {
     font-weight: 600;
+    text-align: center; /* 文本居中 */
+    grid-column: 2; /* 放置在第二栏 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chat-messages {
@@ -55,6 +74,39 @@
     border-bottom-left-radius: 4px; /* 左下角变直一点 */
 }
 
+/* --- 正在输入动画 --- */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 15px; /* 调整内边距使其看起来更协调 */
+}
+
+.typing-indicator .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #b0b0b0; /* 点的颜色 */
+    border-radius: 50%;
+    animation: typing-bounce 1.2s infinite ease-in-out;
+}
+
+.typing-indicator .dot:nth-child(2) {
+    animation-delay: -1.0s;
+}
+
+.typing-indicator .dot:nth-child(3) {
+    animation-delay: -0.8s;
+}
+
+@keyframes typing-bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1.0);
+    }
+}
+
 
 .chat-input-area {
     display: flex;
@@ -76,7 +128,8 @@
     width: 100%; 
 }
 
-.chat-input-area .send-button {
+.chat-input-area .send-button,
+.chat-input-area .api-call-button {
     background-color: var(--button-primary-bg);
     color: var(--button-primary-text);
     border: none;
@@ -86,7 +139,71 @@
     flex-shrink: 0;
 }
 
+.chat-input-area .api-call-button {
+    background-color: #6c757d; /* 给一个不同的背景色以区分 */
+}
+
 /* --- 最终修复代码 --- */
 .chat-view {
     min-width: 0;
+}
+
+/* --- AI 人设编辑模态框样式 --- */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: var(--primary-text-color);
+}
+
+.modal-content .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--secondary-text-color);
+}
+
+.modal-content input[type="text"],
+.modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--input-border-radius);
+    font-size: 16px;
+    background-color: var(--input-bg-color);
+    color: var(--primary-text-color);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
 }
