@@ -50,6 +50,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px; /* 消息之间的间距 */
+    font-size: var(--chat-font-size, 14px); /* 使用CSS变量控制字体大小 */
 }
 
 /* --- 任务五：消息气泡样式 --- */
@@ -57,6 +58,7 @@
     padding: 10px 15px;
     border-radius: 18px;
     word-wrap: break-word; /* 长单词或链接自动换行 */
+    font-size: inherit; /* 继承父元素的字体大小 */
 }
 
 .message.sent {
@@ -174,6 +176,10 @@
     width: 90%;
     max-width: 500px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* 确保 padding 不会影响高度计算 */
+    max-height: 80vh; /* 限制最大高度为视窗的80% */
+    overflow-y: auto; /* 当内容溢出时显示滚动条 */
+
 }
 
 .modal-content h2 {
@@ -210,6 +216,23 @@
     justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
+}
+
+/* --- 任务六：修复字体滑块的响应式布局 --- */
+.form-group-slider {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 在标签和滑块之间添加一些间距 */
+}
+
+.form-group-slider label {
+    flex-shrink: 0; /* 防止标签在空间不足时被压缩 */
+    margin-bottom: 0; /* 覆盖默认的 margin-bottom */
+}
+
+.form-group-slider .slider {
+    width: 100%; /* 让滑块填充剩余的可用空间 */
+    flex-grow: 1;
 }
 
 /* --- 时间戳样式 --- */

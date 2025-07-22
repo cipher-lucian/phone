@@ -5,6 +5,10 @@ import { formatTimestamp, getFormattedDateTime, getTimeDifferenceDescription } f
 let chatMessages, chatInput, sendButton, chatTitle, apiCallButton;
 let moreOptionsButton, personaModal, personaNameInput, personaPromptInput;
 let userNameInput, userPersonaInput, savePersonaButton, cancelPersonaButton;
+let fontSizeSlider, fontSizeValue;
+
+// --- 常量 ---
+const CHAT_FONT_SIZE_KEY = 'chatFontSize';
 
 // --- 数据 ---
 let chatHistory = []; // 用于存储聊天记录
@@ -61,6 +65,7 @@ function openPersonaModal() {
     userNameInput.value = currentUserPersona.name;
     userPersonaInput.value = currentUserPersona.prompt;
     personaModal.classList.remove('hidden');
+    // The font size UI is now initialized at startup, so we don't need to call it here.
 }
 
 function closePersonaModal() {
@@ -326,6 +331,31 @@ function scrollToBottom() {
     }
 }
 
+// --- 新增：字体大小控制 ---
+function setupFontSizeControls() {
+    const savedSize = loadFromStorage(CHAT_FONT_SIZE_KEY) || 14;
+    
+    applyFontSize(savedSize);
+
+    if (fontSizeSlider) {
+        fontSizeSlider.value = savedSize;
+        fontSizeSlider.addEventListener('input', () => {
+            const newSize = fontSizeSlider.value;
+            applyFontSize(newSize);
+            saveToStorage(CHAT_FONT_SIZE_KEY, newSize);
+        });
+    }
+}
+
+function applyFontSize(size) {
+    if (chatMessages) {
+        chatMessages.style.setProperty('--chat-font-size', `${size}px`);
+    }
+    if (fontSizeValue) {
+        fontSizeValue.textContent = size;
+    }
+}
+
 function initChat() {
     // 缓存 DOM 元素
     chatMessages = document.querySelector('.chat-messages');
@@ -341,10 +371,15 @@ function initChat() {
     userPersonaInput = document.querySelector('#user-persona');
     savePersonaButton = document.querySelector('#save-persona-btn');
     cancelPersonaButton = document.querySelector('#cancel-persona-btn');
+    fontSizeSlider = document.querySelector('#font-size-slider');
+    fontSizeValue = document.querySelector('#font-size-value');
 
     // 加载人设并更新标题
     loadPersonas();
     updateChatHeader();
+
+    // 设置字体大小功能
+    setupFontSizeControls();
 
     // 绑定事件监听器
     if (sendButton) sendButton.addEventListener('click', sendMessage);
