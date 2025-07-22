@@ -1,7 +1,8 @@
-const CACHE_NAME = 'phone-app-cache-v1';
+const CACHE_NAME = 'phone-app-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/manifest.json',
   '/css/base.css',
   '/css/layout.css',
   '/css/components/home.css',
@@ -13,7 +14,9 @@ const urlsToCache = [
   '/js/modules/settings.js',
   '/js/ui/view-manager.js',
   '/js/utils/storage.js',
-  '/js/utils/time.js'
+  '/js/utils/time.js',
+  '/assets/icon-192.png',
+  '/assets/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
