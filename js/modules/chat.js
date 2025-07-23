@@ -5,7 +5,7 @@ import { formatTimestamp, getFormattedDateTime, getTimeDifferenceDescription } f
 let chatMessages, chatInput, sendButton, chatTitle, apiCallButton;
 let moreOptionsButton, personaModal, personaNameInput, personaPromptInput;
 let userNameInput, userPersonaInput, savePersonaButton, cancelPersonaButton;
-let fontSizeSlider, fontSizeValue;
+let fontSizeSlider, fontSizeValue, contextMemoryCountInput;
 
 // --- 常量 ---
 const CHAT_FONT_SIZE_KEY = 'chatFontSize';
@@ -18,7 +18,8 @@ let currentUserPersona = {}; // 用于存储当前用户人设
 // --- 默认人设 ---
 const DEFAULT_AI_PERSONA = {
     name: 'AI 助手',
-    prompt: '你是一个乐于助人、简洁明了的通用AI助手。'
+    prompt: '你是一个乐于助人、简洁明了的通用AI助手。',
+    memoryCount: 0 // 0 表示不限制
 };
 const DEFAULT_USER_PERSONA = {
     name: '用户',
@@ -36,13 +37,18 @@ function savePersonas() {
     const aiPrompt = personaPromptInput.value.trim();
     const userName = userNameInput.value.trim();
     const userPrompt = userPersonaInput.value.trim();
+    const memoryCount = parseInt(contextMemoryCountInput.value, 10);
 
     if (!aiName) {
         alert('AI 名称不能为空');
         return;
     }
 
-    currentAiPersona = { name: aiName, prompt: aiPrompt };
+    currentAiPersona = { 
+        name: aiName, 
+        prompt: aiPrompt,
+        memoryCount: isNaN(memoryCount) || memoryCount < 0 ? 0 : memoryCount
+    };
     currentUserPersona = { name: userName, prompt: userPrompt };
 
     saveToStorage('currentAiPersona', currentAiPersona);
@@ -64,8 +70,9 @@ function openPersonaModal() {
     personaPromptInput.value = currentAiPersona.prompt;
     userNameInput.value = currentUserPersona.name;
     userPersonaInput.value = currentUserPersona.prompt;
+    // 如果 memoryCount 未定义或为 null，则提供一个默认值
+    contextMemoryCountInput.value = currentAiPersona.memoryCount ?? 0;
     personaModal.classList.remove('hidden');
-    // The font size UI is now initialized at startup, so we don't need to call it here.
 }
 
 function closePersonaModal() {
@@ -197,8 +204,11 @@ ${currentAiPersona.prompt}
         content: finalSystemPrompt.trim()
     };
 
-    // 3. 准备用户消息历史
-    const userMessages = chatHistory.map(msg => ({
+    // 3. 准备用户消息历史 (根据记忆条数截取)
+    const memoryCount = currentAiPersona.memoryCount || 0;
+    const historyToUse = memoryCount > 0 ? chatHistory.slice(-memoryCount) : chatHistory;
+
+    const userMessages = historyToUse.map(msg => ({
         role: msg.type === 'sent' ? 'user' : 'assistant',
         content: msg.text
     }));
@@ -373,6 +383,7 @@ function initChat() {
     cancelPersonaButton = document.querySelector('#cancel-persona-btn');
     fontSizeSlider = document.querySelector('#font-size-slider');
     fontSizeValue = document.querySelector('#font-size-value');
+    contextMemoryCountInput = document.querySelector('#context-memory-count');
 
     // 加载人设并更新标题
     loadPersonas();

@@ -67,31 +67,39 @@
             <button class="send-button">发送</button>
         </div>
 
-        <!-- AI 人设编辑模态框 -->
+        <!-- 聊天设置模态框 -->
         <div id="persona-modal" class="modal-overlay hidden">
-            <div class="modal-content">
-                <h2>编辑 AI 人设</h2>
-                <div class="form-group">
-                    <label for="persona-name">AI 名称</label>
-                    <input type="text" id="persona-name" placeholder="例如：知识渊博的教授">
+            <div class="modal-content modal-fixed-layout">
+                <div class="modal-header">
+                    <h2>聊天设置</h2>
                 </div>
-                <div class="form-group">
-                    <label for="persona-prompt">核心人设 (System Prompt)</label>
-                    <textarea id="persona-prompt" rows="6" placeholder="描述 AI 的角色、性格、背景、说话风格..."></textarea>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="persona-name">AI 名称 / 备注</label>
+                        <input type="text" id="persona-name" placeholder="例如：知识渊博的教授">
+                    </div>
+                    <div class="form-group">
+                        <label for="persona-prompt">对方人设 (AI Persona)</label>
+                        <textarea id="persona-prompt" rows="5" placeholder="描述 AI 的角色、性格、背景、说话风格..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-name">你的称呼</label>
+                        <input type="text" id="user-name" placeholder="AI 如何称呼你">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-persona">你的人设</label>
+                        <textarea id="user-persona" rows="3" placeholder="描述你自己的角色、性格..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="context-memory-count">上下文记忆条数</label>
+                        <input type="number" id="context-memory-count" placeholder="数字，0为不限制" min="0">
+                    </div>
+                    <div class="form-group form-group-slider">
+                        <label for="font-size-slider">聊天字体大小: <span id="font-size-value">14</span>px</label>
+                        <input type="range" id="font-size-slider" min="12" max="20" value="14" class="slider">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="user-name">用户姓名</label>
-                    <input type="text" id="user-name" placeholder="你的名字">
-                </div>
-                <div class="form-group">
-                    <label for="user-persona">用户人设</label>
-                    <textarea id="user-persona" rows="3" placeholder="描述你自己的角色、性格..."></textarea>
-                </div>
-                <div class="form-group form-group-slider">
-                    <label for="font-size-slider">聊天字体大小: <span id="font-size-value">14</span>px</label>
-                    <input type="range" id="font-size-slider" min="12" max="20" value="14" class="slider">
-                </div>
-                <div class="modal-actions">
+                <div class="modal-footer">
                     <button id="cancel-persona-btn" class="btn-secondary">取消</button>
                     <button id="save-persona-btn" class="btn-primary">保存</button>
                 </div>
@@ -157,7 +165,7 @@
             <p>您确定要删除这条备忘录吗？</p>
             <div class="modal-actions">
                 <button id="cancel-delete-btn" class="btn-secondary">取消</button>
-                <button id="confirm-delete-btn" class="btn-danger">确认删除</button>
+                <button id="confirm-delete-btn" class="btn-primary">确认删除</button>
             </div>
         </div>
     </div>
