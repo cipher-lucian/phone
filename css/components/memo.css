@@ -1,0 +1,66 @@
+/* Memo View Specific Styles */
+#memo-view .view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#memo-view .add-memo-button {
+    font-size: 24px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 15px;
+}
+
+.memo-list-area {
+    padding: 15px;
+    height: calc(100% - 50px); /* Header height */
+    overflow-y: auto;
+}
+
+/* Memo Item Styles */
+.memo-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.memo-item.completed .memo-content {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+.memo-checkbox {
+    margin-right: 10px;
+}
+
+.memo-content {
+    flex-grow: 1; /* This makes the content take up all available space */
+    word-break: break-word;
+}
+
+.delete-memo-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    margin-left: 10px; /* Add some space between content and button */
+}
+
+
+/* Add Memo Popup / Modal Styles */
+#add-memo-popup #memo-textarea {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Delete Confirmation Modal Styles */
+#delete-confirm-popup .modal-content p {
+    margin-bottom: 20px;
+    text-align: center;
+}
