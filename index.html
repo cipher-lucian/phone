@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/components/home.css">
     <link rel="stylesheet" href="css/components/chat.css">
     <link rel="stylesheet" href="css/components/settings.css">
+    <link rel="stylesheet" href="css/components/memo.css">
     <link rel="stylesheet" href="css/utilities.css">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="assets/icon-192.png">
@@ -43,6 +44,10 @@
         <div class="app-icon" data-app="settings">
             <div class="app-icon-img app-icon-bg">⚙️</div>
             <span class="app-icon-label">设置</span>
+        </div>
+        <div class="app-icon" data-app="memo">
+            <div class="app-icon-img app-icon-bg">📝</div>
+            <span class="app-icon-label">备忘录</span>
         </div>
     </div>
     <div class="chat-view hidden">
@@ -120,6 +125,40 @@
             <button id="fetch-models-btn" class="btn-primary">拉取模型</button>
             <button id="save-settings-btn" class="btn-primary">保存设置</button>
             <div id="status-message" class="status-message"></div>
+        </div>
+    </div>
+    <!-- Memo View -->
+    <div id="memo-view" class="view hidden">
+        <header class="view-header">
+            <button class="back-button" data-action="back" aria-label="返回">＜</button>
+            <h1 class="view-title">备忘录</h1>
+            <button class="add-memo-button" aria-label="添加新备忘录">+</button>
+        </header>
+        <div class="memo-list-area">
+            <!-- 备忘录条目将在这里动态添加 -->
+        </div>
+    </div>
+
+    <!-- Add Memo Popup -->
+    <div id="add-memo-popup" class="modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <h2>新的备忘录</h2>
+            <textarea id="memo-textarea" placeholder="在这里输入内容..." rows="8"></textarea>
+            <div class="modal-actions">
+                <button id="cancel-memo-btn" class="btn-secondary">取消</button>
+                <button id="save-memo-btn" class="btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Popup -->
+    <div id="delete-confirm-popup" class="modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <p>您确定要删除这条备忘录吗？</p>
+            <div class="modal-actions">
+                <button id="cancel-delete-btn" class="btn-secondary">取消</button>
+                <button id="confirm-delete-btn" class="btn-danger">确认删除</button>
+            </div>
         </div>
     </div>
 </div>

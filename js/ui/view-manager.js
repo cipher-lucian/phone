@@ -10,6 +10,7 @@ function initViews() {
     views.home = document.querySelector('.home-screen');
     views.chat = document.querySelector('.chat-view');
     views.settings = document.querySelector('.settings-view');
+    views.memo = document.querySelector('#memo-view');
 }
 
 // --- 视图切换逻辑 ---

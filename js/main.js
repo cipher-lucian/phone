@@ -6,6 +6,7 @@ import { updateTime } from './utils/time.js';
 import { switchView, views, initViews } from './ui/view-manager.js';
 import { initChat, scrollToBottom } from './modules/chat.js';
 import { initSettingsPage } from './modules/settings.js';
+import { initMemo } from './modules/memo.js';
 
 // --- 元素缓存 ---
 let mainContent;
@@ -48,6 +49,7 @@ function init() {
     initViews();
     initChat();
     initSettingsPage();
+    initMemo();
 
     // 初始化时间
     updateTime();
