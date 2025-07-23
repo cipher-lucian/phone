@@ -154,40 +154,39 @@
     min-width: 0;
 }
 
-/* --- AI 人设编辑模态框样式 --- */
-.modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(2px);
+/* --- 聊天设置模态框样式 --- */
+.modal-content.modal-fixed-layout .modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    flex-shrink: 0;
 }
 
-.modal-content {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box; /* 确保 padding 不会影响高度计算 */
-    max-height: 80vh; /* 限制最大高度为视窗的80% */
-    overflow-y: auto; /* 当内容溢出时显示滚动条 */
-
-}
-
-.modal-content h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
+.modal-content.modal-fixed-layout .modal-header h2 {
+    margin: 0;
     font-size: 18px;
-    color: var(--primary-text-color);
 }
+
+.modal-content.modal-fixed-layout .modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.modal-content.modal-fixed-layout .modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* 移除原始 .modal-content 的内边距和溢出设置，因为它们现在由 header/body/footer 控制 */
+.modal-content.modal-fixed-layout {
+    padding: 0; 
+}
+
+/* .modal-content h2 is now styled inside .modal-header */
 
 .modal-content .form-group {
     margin-bottom: 15px;
@@ -201,6 +200,7 @@
 }
 
 .modal-content input[type="text"],
+.modal-content input[type="number"],
 .modal-content textarea {
     width: 100%;
     padding: 10px;
@@ -209,14 +209,10 @@
     font-size: 16px;
     background-color: var(--input-bg-color);
     color: var(--primary-text-color);
+    box-sizing: border-box; /* 确保 padding 不会影响宽度 */
 }
 
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
+/* .modal-actions is replaced by .modal-footer */
 
 /* --- 任务六：修复字体滑块的响应式布局 --- */
 .form-group-slider {
